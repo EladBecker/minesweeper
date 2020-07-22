@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="style.css">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minesweeper | Elad Becker</title>
+</head>
+
+<body onload="init(0)">
+    <h1>Minesweeper | Elad Becker</h1>
+
+    <div class="dashboard">
+        <span class="mines-display">💣: 00</span>
+        <span class="smiley">:-)</span>
+        <span class="timer">000</span>
+    </div>
+    <table class="board">
+
+    </table>
+    <div class="levels">
+        <button class="levelBtn" onclick="init(0)">Easy (4x4)</button>
+        <button class="levelBtn" onclick="init(1)">Medium (8x8)</button>
+        <button class="levelBtn" onclick="init(2)">Hard (12x12)</button>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>
