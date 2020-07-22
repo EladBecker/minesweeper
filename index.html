@@ -9,21 +9,22 @@
 </head>
 
 <body onload="init(0)">
-    <h1>Minesweeper | Elad Becker</h1>
+    <h1>Minesweeper</h1>
 
-    <div class="dashboard">
-        <span class="mines-display">💣: 00</span>
-        <span><button class="smileyBtn" onclick="restart()"></button></span>
-        time:<span class="timer"></span>
-    </div>
-    <table class="board">
-
-    </table>
     <div class="levels">
         <button class="levelBtn" onclick="init(0)">Easy (4x4)</button>
         <button class="levelBtn" onclick="init(1)">Medium (8x8)</button>
         <button class="levelBtn" onclick="init(2)">Hard (12x12)</button>
     </div>
+    <div class="dashboard">
+        <span class="mines-display">💣: 00</span>
+        <span class="smiley-container" onclick="restart()"></span>
+        <span class="timer"></span>
+    </div>
+    <table class="board">
+
+    </table>
+    <footer>🐥 &copy; coffee rights | Elad Becker | CaJul-2020</footer>
     <script src="main.js"></script>
 </body>
 
