@@ -2,12 +2,26 @@ function renderBoard(board) {
     var strHTML = ``;
     for (var i = 0; i < board.length; i++) {
         strHTML += `<tr>`;
+        var numClass;
         for (var j = 0; j < board[i].length; j++) {
-            var currCellContent = (board[i][j].isMine) ? MINE : board[i][j].minesAroundCount;
-            currCellContent = (board[i][j].isShown) ? currCellContent : EMPTY;
+            var currCell = board[i][j];
+            var currCellContent;
+            if(!currCell.isShown)currCellContent = EMPTY;
+            else{
+                if (currCell.isMine && !currCell.isMarked) currCellContent = MINE;
+                else if (currCell.isMarked) currCellContent = FLAG;
+                else if (currCell.minesAroundCount) {
+                    currCellContent = currCell.minesAroundCount;
+                    numClass = 'clicked-'+currCell.minesAroundCount;
+                }
+                else if (!currCell.minesAroundCount) currCellContent = EMPTY;
+            }
             strHTML +=
                 `<td class="cell">
-                <button id="btn-${i}-${j}" onclick="cellClicked(this, ${i}, ${j})" oncontextmenu="cellMarked(this, ${i}, ${j})">
+                <button id="btn-${i}-${j}" 
+                    class="${currCell.isShown ? 'clicked' : ''} ${numClass}"
+                    onclick="cellClicked(this, ${i}, ${j})" 
+                    oncontextmenu="cellMarked(this, ${i}, ${j})">
                     ${currCellContent}
                 </button>
             </td>`;

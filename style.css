@@ -86,7 +86,7 @@ footer {
     border-radius: 5px;
 }
 
-.safe-click-btn{
+.safe-click-btn, .undo-btn {
     display: inline-block;
 }
 
@@ -116,30 +116,31 @@ footer {
     border: none;
 }
 
-.best-times p{
+.best-times p {
     text-align: center;
 }
 
-.best-times table td{
+.best-times table td {
     border: none;
     background-color: black;
     white-space: nowrap;
     text-align: center;
 }
+
+@keyframes blinker {
+    50% {
+        background-color: rgba(6, 235, 159, 0.555);
+    }
+}
+
+.flash {
+    animation: blinker 1s alternate infinite;
+}
+
 .clicked {
     background-color: rgb(189, 187, 187);
     font-size: 14px;
     font-weight: bold;
-}
-
-@keyframes blinker {
-    50% {
-      background-color: rgba(6, 235, 159, 0.555);
-    }
-  }
-
-.flash{
-    animation: blinker 1s alternate infinite;
 }
 
 .clicked-1 {

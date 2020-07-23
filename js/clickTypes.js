@@ -3,6 +3,8 @@ function cellMarked(elCell, i, j) {
         if (gGame.shownCount !== 0) return;
         startTimer();
     }
+    gUndos.push(JSON.parse(JSON.stringify(gBoard)));
+    console.log(gUndos);
     var currCell = gBoard[i][j];
     currCell.isMarked = !currCell.isMarked;
     if (currCell.isMarked) {
@@ -47,7 +49,12 @@ function cellClicked(elCell, i, j) {
         }, 1000);
         return;
     }
+    gUndos.push(JSON.parse(JSON.stringify(gBoard)));
+    console.log(gUndos);
     currCell.isShown = true;
+    if(currCell.minesAroundCount){
+        elCell.classList.add(`clicked-${currCell.minesAroundCount}`)
+    }
     if (currCell.isMine) {
         if (gGame.lives > 0) {
             currCell.isShown = false;
@@ -80,10 +87,13 @@ function cellClicked(elCell, i, j) {
 
 function expandShown(board, elCell, iIdx, jIdx) {
     var currCell = board[iIdx][jIdx];
+    if(currCell.minesAroundCount){
+        elCell.classList.add(`clicked-${currCell.minesAroundCount}`)
+    }
     currCell.isShown = true;
     gGame.shownCount++;
     elCell.innerText = (currCell.minesAroundCount) ? currCell.minesAroundCount : EMPTY;
-    elCell.classList.add('clicked', 'clicked-' + currCell.minesAroundCount);
+    elCell.classList.add('clicked');
     if (currCell.minesAroundCount) return; //if it has mines neighbours go back
     else {
         //if it's an empty cell, run around all the neighbours and check for them
@@ -103,8 +113,8 @@ function expandShown(board, elCell, iIdx, jIdx) {
 }
 
 function safeClick() {
-    if(!gGame.isOn) return;
-    if(!gGame.safeClicks) return;
+    if (!gGame.isOn) return;
+    if (!gGame.safeClicks) return;
     gGame.safeClicks--;
     var rndLoc = getRndLoc(gGame.level.size);
     while (
@@ -125,9 +135,33 @@ function hintClicked() {
     }
 }
 
-
-
 function restart() {
     clearInterval(gTimeInterval);
     init(gLevelIdx);
 }
+
+function undo() {
+    if (!gGame.isOn || !gUndos.length) return;
+    gBoard = gUndos.pop();
+    gGame.shownCount = 0;
+    gGame.markedCount = 0;
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[i].length; j++) {
+            gGame.shownCount = gBoard[i][j].isShown ? gGame.shownCount + 1 : gGame.shownCount;
+            gGame.markedCount = gBoard[i][j].isMarked ? gGame.markedCount + 1 : gGame.markedCount;
+        }
+    }
+    renderBoard(gBoard);
+}
+
+// gGame = {
+//     level: gLevels[levelIdx],
+//     isOn: false,
+//     shownCount: 0,
+//     markedCount: 0,
+//     secsPassed: 0,
+//     hintMode: false,
+//     hintCount: 3,
+//     lives: 3,
+//     safeClicks: 3
+// }

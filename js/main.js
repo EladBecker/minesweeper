@@ -23,6 +23,7 @@ var gLevelIdx;
 var gGame;
 var gBoard;
 var gTimeInterval;
+var gUndos;
 
 var gElSmiley = document.querySelector('.smiley-container');
 var gElTimer = document.querySelector('.timer');
@@ -45,6 +46,7 @@ function init(levelIdx) {
     renderBoard(gBoard);
     updateMinesDisplayEl();
     updateBestTimeEl();
+    gUndos = [];
     gElSmiley.innerText = SMILEY;
     gElTimer.innerText = '000';
     gElHint.innerText = HINT + 'x ' + gGame.hintCount;
