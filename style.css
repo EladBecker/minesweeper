@@ -146,6 +146,10 @@ footer {
     font-weight: bold;
 }
 
+.manual-mine-selected{
+    background-color: rgb(156, 22, 22);
+}
+
 .clicked-1 {
     color: blue;
 }

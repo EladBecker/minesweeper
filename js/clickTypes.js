@@ -1,10 +1,10 @@
 function cellMarked(elCell, i, j) {
+    if (gIsManual) return;
     if (!gGame.isOn) {
         if (gGame.shownCount !== 0) return;
         startTimer();
     }
     gUndos.push(JSON.parse(JSON.stringify(gBoard)));
-    console.log(gUndos);
     var currCell = gBoard[i][j];
     currCell.isMarked = !currCell.isMarked;
     if (currCell.isMarked) {
@@ -25,9 +25,19 @@ function cellMarked(elCell, i, j) {
 
 function cellClicked(elCell, i, j) {
     if (!gGame.isOn) {
+        if (gIsManual) {
+            gManualMines.push({ i: i, j: j });
+            console.log(gManualMines);
+            elCell.classList.add('manual-mine-selected');
+            return;
+        }
         if (gGame.shownCount !== 0) return;
         gGame.isOn = true;
-        layMines(i, j);
+        if (gManualMines.length) {
+            gGame.level.mines = gManualMines.length;
+            gManualMines = [];
+            document.querySelector('.mines-display').innerText = gGame.level.mines;
+        } else layMines(i, j);
         setMinesNegsCount(gBoard);
         startTimer();
     }
@@ -175,6 +185,21 @@ function toggleHint(hints, toShow) {
         } else {
             currElCell.innerText = '';
             currElCell.classList.remove('clicked', classNum);
+        }
+    }
+}
+
+function setManualMode() {
+    if (gGame.isOn) return;
+    gIsManual = !gIsManual;
+    var elManualBtn = document.querySelector('.manual-btn');
+    if (gIsManual) elManualBtn.classList.add('manual-mine-selected');
+    else {
+        elManualBtn.classList.remove('manual-mine-selected');
+        for (var i = 0; i < gManualMines.length; i++) {
+            gBoard[gManualMines[i].i][gManualMines[i].j].isMine = true;
+            var currElCell = document.querySelector('#btn-' + gManualMines[i].i + '-' + gManualMines[i].j);
+            currElCell.classList.remove('manual-mine-selected');
         }
     }
 }

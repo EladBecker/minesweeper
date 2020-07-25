@@ -24,6 +24,8 @@ var gGame;
 var gBoard;
 var gTimeInterval;
 var gUndos;
+var gManualMines;
+var gIsManual;
 
 var gElSmiley = document.querySelector('.smiley-container');
 var gElTimer = document.querySelector('.timer');
@@ -32,7 +34,10 @@ var gElHint = document.querySelector('.hint');
 function init(levelIdx) {
     gLevelIdx = levelIdx;
     gGame = {
-        level: gLevels[levelIdx],
+        level: {
+            size: gLevels[levelIdx].size,
+            mines: gLevels[levelIdx].mines
+        },
         isOn: false,
         shownCount: 0,
         markedCount: 0,
@@ -42,6 +47,7 @@ function init(levelIdx) {
         lives: 3,
         safeClicks: 3
     }
+    gManualMines = [];
     gBoard = buildBoard(gGame.level);
     renderBoard(gBoard);
     updateMinesDisplayEl();
