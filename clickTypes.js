@@ -41,18 +41,27 @@ function cellClicked(elCell, i, j) {
             hintsStr = HINT_USED + 'x ';
         }
         hintsStr += gGame.hintCount;
+        var hints = [];
+        for (var hintI = i - 1; hintI <= i + 1; hintI++) {
+            for (var hintJ = j - 1; hintJ <= j + 1; hintJ++) {
+                if (hintI < 0 || hintI > gBoard.length - 1 ||
+                    hintJ < 0 || hintJ > gBoard[hintI].length - 1 ||
+                    gBoard[hintI][hintJ].isShown ||
+                    gBoard[hintI][hintJ].isMarked) continue;
+                hints.push({ i: hintI, j: hintJ });
+            }
+        }
         gElHint.innerText = hintsStr;
-        toggleHint(i, j, true);
+        toggleHint(hints, true);
         setTimeout(function () {
             gGame.hintMode = false;
-            toggleHint(i, j, false);
+            toggleHint(hints, false);
         }, 1000);
         return;
     }
     gUndos.push(JSON.parse(JSON.stringify(gBoard)));
-    console.log(gUndos);
     currCell.isShown = true;
-    if(currCell.minesAroundCount){
+    if (currCell.minesAroundCount) {
         elCell.classList.add(`clicked-${currCell.minesAroundCount}`)
     }
     if (currCell.isMine) {
@@ -87,7 +96,7 @@ function cellClicked(elCell, i, j) {
 
 function expandShown(board, elCell, iIdx, jIdx) {
     var currCell = board[iIdx][jIdx];
-    if(currCell.minesAroundCount){
+    if (currCell.minesAroundCount) {
         elCell.classList.add(`clicked-${currCell.minesAroundCount}`)
     }
     currCell.isShown = true;
@@ -130,9 +139,7 @@ function safeClick() {
 }
 
 function hintClicked() {
-    if (gGame.hintCount > 0) {
-        gGame.hintMode = !gGame.hintMode;
-    }
+    if (gGame.hintCount > 0) gGame.hintMode = !gGame.hintMode;
 }
 
 function restart() {
@@ -152,4 +159,22 @@ function undo() {
         }
     }
     renderBoard(gBoard);
+}
+
+function toggleHint(hints, toShow) {
+    for (var i = 0; i < hints.length; i++) {
+        var currCell = gBoard[hints[i].i][hints[i].j];
+        currCell.isShown = toShow;
+        var currElCell = document.querySelector('#btn-' + hints[i].i + '-' + hints[i].j);
+        var classNum = 'clicked-' + currCell.minesAroundCount;
+        if (toShow) {
+            var btnStr = currCell.isMine ? MINE : currCell.minesAroundCount;
+            btnStr = btnStr ? btnStr : '';
+            currElCell.innerText = btnStr;
+            currElCell.classList.add('clicked', classNum);
+        } else {
+            currElCell.innerText = '';
+            currElCell.classList.remove('clicked', classNum);
+        }
+    }
 }
