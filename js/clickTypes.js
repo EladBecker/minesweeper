@@ -46,14 +46,15 @@ function cellClicked(elCell, i, j) {
             for (var hintJ = j - 1; hintJ <= j + 1; hintJ++) {
                 if (hintI < 0 || hintI > gBoard.length - 1 ||
                     hintJ < 0 || hintJ > gBoard[hintI].length - 1 ||
-                    gBoard[hintI][hintJ].isShown) continue;
+                    gBoard[hintI][hintJ].isShown ||
+                    gBoard[hintI][hintJ].isMarked) continue;
                 hints.push({ i: hintI, j: hintJ });
             }
-        } 
+        }
         gElHint.innerText = hintsStr;
         toggleHint(hints, true);
         setTimeout(function () {
-            gGame.hintMode = false; 
+            gGame.hintMode = false;
             toggleHint(hints, false);
         }, 1000);
         return;
